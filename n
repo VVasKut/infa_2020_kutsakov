@@ -1,0 +1,945 @@
+[1mdiff --git a/lab3/__pycache__/graph.cpython-38.pyc b/lab3/__pycache__/graph.cpython-38.pyc[m
+[1mindex 93418da..84dc79a 100644[m
+Binary files a/lab3/__pycache__/graph.cpython-38.pyc and b/lab3/__pycache__/graph.cpython-38.pyc differ
+[1mdiff --git a/lab3/graph.py b/lab3/graph.py[m
+[1mindex 744d21a..99ebb34 100644[m
+[1m--- a/lab3/graph.py[m
+[1m+++ b/lab3/graph.py[m
+[36m@@ -1,17 +1,10 @@[m
+ # -*- coding: utf-8 -*-[m
+[31m-from sys import platform[m
+[31m-import tkinter[m
+[31m-from random import randint[m
+[31m-try:[m
+[31m-    from PIL import ImageTk, Image[m
+[31m-except Exception:[m
+[31m-    pass[m
+ """[m
+ GRAPH - модуль для простой графики в Python.[m
+[31m-    (C) К. Поляков, 2017-2018[m
+[31m-    e-mail: kpolyakov@mail.ru[m
+[31m-    web: http://kpolyakov.spb.ru[m
+[31m-    Версия 1.4.1[m
+[32m+[m[32m  (C) К. Поляков, 2016-2019[m
+[32m+[m[32m  e-mail: kpolyakov@mail.ru[m
+[32m+[m[32m  web: http://kpolyakov.spb.ru[m
+[32m+[m[32m  Версия 1.5.0[m
+ [m
+ Модуль graph - это "обертка" над стандартной библиотекой tkinter,[m
+ позволяющая рисовать простыми командами в отдельном графическом окне.[m
+[36m@@ -20,22 +13,22 @@[m [mGRAPH - модуль для простой графики в Python.[m
+ [m
+ ЛИЦЕНЗИЯ[m
+ [m
+[31m-Copyright (c) 2016-2018, Константин Поляков[m
+[32m+[m[32mCopyright (c) 2016-2019, Константин Поляков[m
+ Все права защищены.[m
+ [m
+ Разрешается повторное распространение и использование как в виде исходного[m
+ кода, так и в двоичной форме, с изменениями или без, при соблюдении[m
+ следующих условий:[m
+[31m-    1) При повторном распространении исходного кода должно оставаться указанное[m
+[31m-         выше уведомление об авторском праве, этот список условий и последующий[m
+[31m-         отказ от гарантий.[m
+[31m-    2) При повторном распространении двоичного кода должна сохраняться[m
+[31m-         указанная выше информация об авторском праве, этот список условий[m
+[31m-         и последующий отказ от гарантий в документации и/или в других[m
+[31m-         материалах, поставляемых при распространении.[m
+[31m-    3) Ни название Организации, ни имена ее сотрудников не могут быть[m
+[31m-         использованы в качестве поддержки или продвижения продуктов,[m
+[31m-         основанных на этом ПО без предварительного письменного разрешения.[m
+[32m+[m[32m  1) При повторном распространении исходного кода должно оставаться указанное[m
+[32m+[m[32m     выше уведомление об авторском праве, этот список условий и последующий[m
+[32m+[m[32m     отказ от гарантий.[m
+[32m+[m[32m  2) При повторном распространении двоичного кода должна сохраняться указанная[m
+[32m+[m[32m     выше информация об авторском праве, этот список условий и последующий[m
+[32m+[m[32m     отказ от гарантий в документации и/или в других материалах,[m
+[32m+[m[32m     поставляемых при распространении.[m
+[32m+[m[32m  3) Ни название Организации, ни имена ее сотрудников не могут быть[m
+[32m+[m[32m     использованы в качестве поддержки или продвижения продуктов,[m
+[32m+[m[32m     основанных на этом ПО без предварительного письменного разрешения.[m
+ [m
+ ДАННОЕ ПРОГРАММНОЕ ОБЕСПЕЧЕНИЕ ПРЕДОСТАВЛЯЕТСЯ «КАК ЕСТЬ», БЕЗ ЛЮБОГО ВИДА[m
+ ГАРАНТИЙ, ЯВНО ВЫРАЖЕННЫХ ИЛИ ПОДРАЗУМЕВАЕМЫХ, ВКЛЮЧАЯ, НО НЕ ОГРАНИЧИВАЯСЬ[m
+[36m@@ -51,42 +44,51 @@[m [mCopyright (c) 2016-2018, Константин Поляков[m
+ Исходя из http://docs.python.org/3/library/sys.html внесены исправления для[m
+ обеспечения работоспособности в ОС Linux (С. Целищев).[m
+ """[m
+[32m+[m[32mfrom sys import platform[m
+ [m
+ if platform == "win32" or platform == "cygwin":[m
+[31m-    VK_SPACE = 0x20[m
+[31m-    VK_PRIOR = 0x21  # PAGE UP key[m
+[31m-    VK_NEXT = 0x22  # PAGE DOWN key[m
+[31m-    VK_END = 0x23  # END key[m
+[31m-    VK_HOME = 0x24  # HOME key[m
+[31m-    VK_LEFT = 0x25[m
+[31m-    VK_UP = 0x26[m
+[31m-    VK_RIGHT = 0x27[m
+[31m-    VK_DOWN = 0x28[m
+[31m-    VK_INSERT = 0x2D  # INS key[m
+[31m-    VK_DELETE = 0x2E  # DELETE key[m
+[31m-    VK_BACK = 0x08  # BACKSPACE key[m
+[31m-    VK_TAB = 0x09  # TAB key[m
+[31m-    VK_RETURN = 0x0D  # RETURN key[m
+[31m-    VK_ESCAPE = 0x1B  # ESC key[m
+[32m+[m[32m        VK_SPACE  = 0x20[m
+[32m+[m[32m        VK_PRIOR  = 0x21 # PAGE UP key[m
+[32m+[m[32m        VK_NEXT   = 0x22 # PAGE DOWN key[m
+[32m+[m[32m        VK_END    = 0x23 # END key[m
+[32m+[m[32m        VK_HOME   = 0x24 # HOME key[m
+[32m+[m[32m        VK_LEFT   = 0x25[m
+[32m+[m[32m        VK_UP     = 0x26[m
+[32m+[m[32m        VK_RIGHT  = 0x27[m
+[32m+[m[32m        VK_DOWN   = 0x28[m
+[32m+[m[32m        VK_INSERT = 0x2D # INS key[m
+[32m+[m[32m        VK_DELETE = 0x2E # DELETE key[m
+[32m+[m[32m        VK_BACK   = 0x08 # BACKSPACE key[m
+[32m+[m[32m        VK_TAB    = 0x09 # TAB key[m
+[32m+[m[32m        VK_RETURN = 0x0D # RETURN key[m
+[32m+[m[32m        VK_ESCAPE = 0x1B # ESC key[m
+ elif platform == "linux":[m
+[31m-    VK_SPACE = 0x41[m
+[31m-    VK_PRIOR = 0x70  # PAGE UP key[m
+[31m-    VK_NEXT = 0x75  # PAGE DOWN key[m
+[31m-    VK_END = 0x73  # END key[m
+[31m-    VK_HOME = 0x6E  # HOME key[m
+[31m-    VK_LEFT = 0x71[m
+[31m-    VK_UP = 0x6F[m
+[31m-    VK_RIGHT = 0x72[m
+[31m-    VK_DOWN = 0x74[m
+[31m-    VK_INSERT = 0x76  # INS key[m
+[31m-    VK_DELETE = 0x77  # DELETE key[m
+[31m-    VK_BACK = 0x16  # BACKSPACE key[m
+[31m-    VK_TAB = 0x17  # TAB key[m
+[31m-    VK_RETURN = 0x24  # RETURN key[m
+[31m-    VK_ESCAPE = 0x09  # ESC key[m
+[32m+[m[32m        VK_SPACE  = 0x41[m
+[32m+[m[32m        VK_PRIOR  = 0x70 # PAGE UP key[m
+[32m+[m[32m        VK_NEXT   = 0x75 # PAGE DOWN key[m
+[32m+[m[32m        VK_END    = 0x73 # END key[m
+[32m+[m[32m        VK_HOME   = 0x6E # HOME key[m
+[32m+[m[32m        VK_LEFT   = 0x71[m
+[32m+[m[32m        VK_UP     = 0x6F[m
+[32m+[m[32m        VK_RIGHT  = 0x72[m
+[32m+[m[32m        VK_DOWN   = 0x74[m
+[32m+[m[32m        VK_INSERT = 0x76 # INS key[m
+[32m+[m[32m        VK_DELETE = 0x77 # DELETE key[m
+[32m+[m[32m        VK_BACK   = 0x16 # BACKSPACE key[m
+[32m+[m[32m        VK_TAB    = 0x17 # TAB key[m
+[32m+[m[32m        VK_RETURN = 0x24 # RETURN key[m
+[32m+[m[32m        VK_ESCAPE = 0x09 # ESC key[m
+ [m
+ DEF_GRAPH_WIDTH = 500[m
+ DEF_GRAPH_HEIGHT = 600[m
+[32m+[m
+[32m+[m[32mimport tkinter[m
+[32m+[m[32mfrom random import randint[m
+[32m+[m[32mtry:[m
+[32m+[m[32m  from PIL import ImageTk, Image[m
+[32m+[m[32mexcept:[m
+[32m+[m[32m  pass[m
+[32m+[m
+ NW = tkinter.NW[m
+ N = tkinter.N[m
+ NE = tkinter.NE[m
+[36m@@ -96,443 +98,406 @@[m [mE = tkinter.E[m
+ SW = tkinter.SW[m
+ S = tkinter.S[m
+ SE = tkinter.SE[m
+[32m+[m[32mARC = tkinter.ARC[m
+[32m+[m[32mCHORD = tkinter.CHORD[m
+[32m+[m[32mPIESLICE = tkinter.PIESLICE[m
+ [m
+[31m-[m
+[32m+[m[32m#----------------------------------[m
+ class onTimerCall():[m
+[31m-    def __init__(self, _func, _timeInterval):[m
+[31m-        self.func = _func[m
+[31m-        self.timeInterval = _timeInterval[m
+[31m-        self.active = True[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  def __init__(self, _func, _timeInterval):[m
+[32m+[m[32m    self.func = _func[m
+[32m+[m[32m    self.timeInterval = _timeInterval[m
+[32m+[m[32m    self.active = True[m
+[32m+[m[32m#----------------------------------[m
+ def __initGraph__():[m
+[31m-    global _win, _C, _Cw, _Ch, _Cpos[m
+[31m-    global _pos, _penColor, _brushColor, _penSize[m
+[31m-    global _timerCalls, _viewPort[m
+[31m-    global _images[m
+[31m-    _win = tkinter.Tk()[m
+[31m-    _win.configure(bg="white")[m
+[31m-    geom_str = str(DEF_GRAPH_WIDTH) + "x" + str(DEF_GRAPH_HEIGHT) + "+100+100"[m
+[31m-    _win.geometry(geom_str)[m
+[31m-    _viewPort = None[m
+[31m-    _Cw = DEF_GRAPH_WIDTH[m
+[31m-    _Ch = DEF_GRAPH_HEIGHT[m
+[31m-    _C = tkinter.Canvas([m
+[31m-            _win, background='white', bd=0,[m
+[31m-            highlightthickness=1, width=_Cw, height=_Ch[m
+[31m-    )[m
+[31m-    _Cpos = [0, 0][m
+[31m-    _C.place(x=_Cpos[0], y=_Cpos[1])[m
+[31m-    _penColor = "black"[m
+[31m-    _penSize = 1[m
+[31m-    _brushColor = ""[m
+[31m-    _pos = (0, 0)[m
+[31m-    _timerCalls = [][m
+[31m-    _images = [][m
+[31m-[m
+[31m-[m
+[32m+[m[32m  global _win, _C, _Cw, _Ch, _Cpos[m
+[32m+[m[32m  global _pos, _penColor, _brushColor, _penSize[m
+[32m+[m[32m  global _timerCalls, _viewPort[m
+[32m+[m[32m  global _images[m
+[32m+[m[32m  _win = tkinter.Tk()[m
+[32m+[m[32m  _win.configure(bg="white")[m
+[32m+[m[32m  _win.geometry(str(DEF_GRAPH_WIDTH)+"x"+[m
+[32m+[m[32m                str(DEF_GRAPH_HEIGHT)+"+100+100")[m
+[32m+[m[32m  _viewPort = None[m
+[32m+[m[32m  _Cw = DEF_GRAPH_WIDTH[m
+[32m+[m[32m  _Ch = DEF_GRAPH_HEIGHT[m
+[32m+[m[32m  _C = tkinter.Canvas(_win, background='white', bd=0, highlightthickness=1,[m
+[32m+[m[32m                      width=_Cw, height=_Ch)[m
+[32m+[m[32m  _Cpos = [0, 0][m
+[32m+[m[32m  _C.place(x = _Cpos[0], y = _Cpos[1])[m
+[32m+[m[32m  _penColor = "black"[m
+[32m+[m[32m  _penSize = 1[m
+[32m+[m[32m  _brushColor = ""[m
+[32m+[m[32m  _pos = (0,0)[m
+[32m+[m[32m  _timerCalls = [][m
+[32m+[m[32m  _images = [][m
+[32m+[m[32m#----------------------------------[m
+ def mainWindow():[m
+[31m-    return _win[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  return _win[m
+ def canvas():[m
+[31m-    return _C[m
+[31m-[m
+[31m-[m
+[31m-def canvasPos(x=-1, y=-1):[m
+[32m+[m[32m  return _C[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef canvasPos(x = -1, y = -1):[m
+     global _C, _Cpos[m
+     if x >= 0:[m
+[31m-        _C.place(x=x, y=y)[m
+[31m-        _Cpos = [x, y][m
+[32m+[m[32m      _C.place(x = x, y = y)[m
+[32m+[m[32m      _Cpos = [x, y][m
+     else:[m
+[31m-        return tuple(_Cpos)[m
+[31m-[m
+[31m-[m
+[31m-def canvasSize(w=-1, h=-1):[m
+[32m+[m[32m      return tuple(_Cpos)[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef canvasSize(w = -1, h = -1):[m
+     global _C, _Cw, _Ch[m
+     if w > 0:[m
+[31m-        _C.config(width=w, height=h)[m
+[31m-        _Cw = w[m
+[31m-        _Ch = h[m
+[32m+[m[32m      _C.config(width = w, height = h)[m
+[32m+[m[32m      _Cw = w[m
+[32m+[m[32m      _Ch = h[m
+     else:[m
+[31m-        return (_Cw, _Ch)[m
+[31m-[m
+[31m-[m
+[32m+[m[32m      return (_Cw, _Ch)[m
+[32m+[m[32m#----------------------------------[m
+ def pointInView(x, y):[m
+[31m-    w, h = windowSize()[m
+[31m-    return (x > 0 and y > 0 and x < h and y < h)[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  w, h = windowSize()[m
+[32m+[m[32m  return (x > 0 and y > 0 and x < h and y < h)[m
+ def circleInView(x, y, r):[m
+[31m-    w, h = windowSize()[m
+[31m-    return (x > r and y > r and x < w-r and y < h-r)[m
+[31m-[m
+[31m-[m
+[31m-def windowSize(w=-1, h=-1):[m
+[31m-    global _win[m
+[31m-    _win.update()[m
+[31m-    geom = _win.geometry().split("+")[m
+[31m-    if w != -1:[m
+[31m-        _win.geometry("%dx%d+%s+%s" % (w, h, geom[1], geom[2]))[m
+[31m-    else:[m
+[31m-        w, h = map(int, geom[0].split("x"))[m
+[31m-        return (w, h)[m
+[31m-[m
+[31m-[m
+[31m-def viewCoords(x1=None, x2=-1, y1=-1, y2=-1):[m
+[31m-    global _viewPort[m
+[31m-    if ~(x1 is None):[m
+[31m-        _viewPort = (x1, x2, y1, y2)[m
+[31m-    else:[m
+[31m-        # geom = windowSize()[m
+[31m-        _viewPort = None[m
+[31m-[m
+[31m-[m
+[31m-def penColor(c=-1, g=-1, b=-1):[m
+[31m-    global _penColor[m
+[31m-    if type(c) == tuple:[m
+[31m-        c, g, b = c[m
+[31m-    if c != -1:[m
+[31m-        if g != -1:[m
+[31m-            c = "#%02X%02X%02X" % (c, g, b)[m
+[31m-        _penColor = c[m
+[31m-    else:[m
+[31m-        return _penColor[m
+[31m-[m
+[31m-[m
+[31m-def penSize(c=-1):[m
+[31m-    global _penSize[m
+[31m-    if c != -1:[m
+[31m-        _penSize = c[m
+[31m-    else:[m
+[31m-        return _penSize[m
+[31m-[m
+[31m-[m
+[31m-def brushColor(c=-1, g=-1, b=-1):[m
+[31m-    global _brushColor[m
+[31m-    if type(c) == tuple:[m
+[31m-        c, g, b = c[m
+[31m-    if c != -1:[m
+[31m-        if c != "":[m
+[31m-            if g != -1:[m
+[31m-                c = "#%02X%02X%02X" % (c, g, b)[m
+[31m-        _brushColor = c[m
+[31m-    else:[m
+[31m-        return _brushColor[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  w, h = windowSize()[m
+[32m+[m[32m  return (x > r and y > r and x < w-r and y < h-r)[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef windowSize(w = -1, h = -1):[m
+[32m+[m[32m  global _win[m
+[32m+[m[32m  _win.update()[m
+[32m+[m[32m  geom = _win.geometry().split("+")[m
+[32m+[m[32m  if w != -1:[m
+[32m+[m[32m    _win.geometry( "%dx%d+%s+%s" % (w, h, geom[1], geom[2]) )[m
+[32m+[m[32m  else:[m
+[32m+[m[32m    w, h = map(int, geom[0].split("x"))[m
+[32m+[m[32m    return (w, h)[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef viewCoords(x1 = None, x2 = -1, y1 = -1, y2 = -1):[m
+[32m+[m[32m  global _viewPort[m
+[32m+[m[32m  if ~(x1 is None):[m
+[32m+[m[32m    _viewPort = (x1, x2, y1, y2)[m
+[32m+[m[32m  else:[m
+[32m+[m[32m    geom = windowSize()[m
+[32m+[m[32m    _viewPort = None[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef penColor(c = -1, g = -1, b = -1):[m
+[32m+[m[32m  global _penColor[m
+[32m+[m[32m  if type(c) == tuple: c, g, b = c[m
+[32m+[m[32m  if c != -1:[m
+[32m+[m[32m    if g != -1:[m
+[32m+[m[32m      c = "#%02X%02X%02X" % (c, g, b)[m
+[32m+[m[32m    _penColor = c[m
+[32m+[m[32m  else:[m
+[32m+[m[32m    return _penColor[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef penSize(c = -1):[m
+[32m+[m[32m  global _penSize[m
+[32m+[m[32m  if c != -1:[m
+[32m+[m[32m    _penSize = c[m
+[32m+[m[32m  else:[m
+[32m+[m[32m    return _penSize[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef brushColor(c = -1, g = -1, b = -1):[m
+[32m+[m[32m  global _brushColor[m
+[32m+[m[32m  if type(c) == tuple: c, g, b = c[m
+[32m+[m[32m  if c != -1 :[m
+[32m+[m[32m    if c != "":[m
+[32m+[m[32m      if g != -1:[m
+[32m+[m[32m        c = "#%02X%02X%02X" % (c, g, b)[m
+[32m+[m[32m    _brushColor = c[m
+[32m+[m[32m  else:[m
+[32m+[m[32m    return _brushColor[m
+[32m+[m[32m#----------------------------------[m
+ def randColor():[m
+[31m-    r = randint(0, 255)[m
+[31m-    g = randint(0, 255)[m
+[31m-    b = randint(0, 255)[m
+[31m-    col = "#%02X%02X%02X" % (r, g, b)[m
+[31m-    return col[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  r = randint(0, 255)[m
+[32m+[m[32m  g = randint(0, 255)[m
+[32m+[m[32m  b = randint(0, 255)[m
+[32m+[m[32m  col = "#%02X%02X%02X" % (r, g, b)[m
+[32m+[m[32m  return col[m
+[32m+[m[32m#----------------------------------[m
+ def transformCoord(x, y):[m
+[31m-    global _viewPort[m
+[31m-    if _viewPort:[m
+[31m-        x1, x2, y1, y2 = _viewPort[m
+[31m-        w, h = windowSize()[m
+[31m-        x = (x - x1)*w/(x2 - x1)[m
+[31m-        y = (y2 - y)*h/(y2 - y1)[m
+[31m-    return x, y[m
+[31m-[m
+[31m-[m
+[31m-def moveTo(x, y=-1):[m
+[31m-    global _pos[m
+[31m-    if type(x) == tuple:[m
+[31m-        x, y = x[m
+[31m-    x, y = transformCoord(x, y)[m
+[31m-    _pos = (x, y)[m
+[31m-[m
+[31m-[m
+[31m-def lineTo(x, y=-1):[m
+[31m-    global _pos[m
+[31m-    if type(x) == tuple:[m
+[31m-        x, y = x[m
+[31m-    x, y = transformCoord(x, y)[m
+[31m-    line = _C.create_line([m
+[31m-            _pos[0], _pos[1], x, y,[m
+[31m-            fill=_penColor, width=_penSize[m
+[31m-    )[m
+[31m-    _pos = (x, y)[m
+[31m-    return line[m
+[31m-[m
+[31m-[m
+[31m-def point(x, y, col=-1):[m
+[31m-    old_col = penColor()[m
+[31m-    if col != -1:[m
+[31m-        penColor(col)[m
+[31m-    moveTo(x, y)[m
+[31m-    pt = lineTo(x+1, y)[m
+[31m-    penColor(old_col)[m
+[31m-    return pt[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  global _viewPort[m
+[32m+[m[32m  if _viewPort:[m
+[32m+[m[32m    x1, x2, y1, y2 = _viewPort[m
+[32m+[m[32m    w, h = windowSize()[m
+[32m+[m[32m    x = (x - x1)*w/(x2 - x1)[m
+[32m+[m[32m    y = (y2 - y)*h/(y2 - y1)[m
+[32m+[m[32m  return x, y[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef moveTo(x, y = -1):[m
+[32m+[m[32m  global _pos[m
+[32m+[m[32m  if type(x) == tuple: x, y = x[m
+[32m+[m[32m  x, y = transformCoord(x, y)[m
+[32m+[m[32m  _pos = (x, y)[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef lineTo(x, y = -1):[m
+[32m+[m[32m  global _pos[m
+[32m+[m[32m  if type(x) == tuple: x, y = x[m
+[32m+[m[32m  x, y = transformCoord ( x, y )[m
+[32m+[m[32m  line = _C.create_line(_pos[0], _pos[1], x, y,[m
+[32m+[m[32m                 fill = _penColor,[m
+[32m+[m[32m                 width = _penSize )[m
+[32m+[m[32m  _pos = (x, y)[m
+[32m+[m[32m  return line[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef point(x, y, col = -1):[m
+[32m+[m[32m  old_col = penColor()[m
+[32m+[m[32m  if col != -1: penColor(col)[m
+[32m+[m[32m  moveTo(x, y)[m
+[32m+[m[32m  pt = lineTo(x+1,y)[m
+[32m+[m[32m  penColor(old_col)[m
+[32m+[m[32m  return pt[m
+[32m+[m[32m#----------------------------------[m
+ def line(x1, y1, x2, y2):[m
+[31m-    x1, y1 = transformCoord(x1, y1)[m
+[31m-    x2, y2 = transformCoord(x2, y2)[m
+[31m-    line = _C.create_line(x1, y1, x2, y2, fill=_penColor, width=_penSize)[m
+[31m-    return line[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  x1, y1 = transformCoord ( x1, y1 )[m
+[32m+[m[32m  x2, y2 = transformCoord ( x2, y2 )[m
+[32m+[m[32m  line = _C.create_line(x1, y1, x2, y2,[m
+[32m+[m[32m                 fill = _penColor,[m
+[32m+[m[32m                 width = _penSize)[m
+[32m+[m[32m  return line[m
+[32m+[m[32m#----------------------------------[m
+ def unpackCoord(points):[m
+[31m-    coord = [][m
+[31m-    for p in points:[m
+[31m-        x, y = transformCoord(p[0], p[1])[m
+[31m-        coord.extend((x, y))[m
+[31m-    return coord[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  coord = [][m
+[32m+[m[32m  for p in points:[m
+[32m+[m[32m    x, y = transformCoord(p[0], p[1])[m
+[32m+[m[32m    coord.extend( (x, y) )[m
+[32m+[m[32m  return coord[m
+[32m+[m[32m#----------------------------------[m
+ def polyline(points):[m
+[31m-    coord = unpackCoord(points)[m
+[31m-    line = _C.create_line(*coord, fill=_penColor, width=_penSize)[m
+[31m-    return line[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  coord = unpackCoord(points)[m
+[32m+[m[32m  line = _C.create_line(*coord,[m
+[32m+[m[32m                 fill = _penColor,[m
+[32m+[m[32m                 width = _penSize)[m
+[32m+[m[32m  return line[m
+[32m+[m[32m#----------------------------------[m
+ def rectangle(x1, y1, x2, y2):[m
+[31m-    x1, y1 = transformCoord(x1, y1)[m
+[31m-    x2, y2 = transformCoord(x2, y2)[m
+[31m-    rect = _C.create_rectangle([m
+[31m-            x1, y1, x2, y2,[m
+[31m-            outline=_penColor, width=_penSize, fill=_brushColor[m
+[31m-    )[m
+[31m-    return rect[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  x1, y1 = transformCoord ( x1, y1 )[m
+[32m+[m[32m  x2, y2 = transformCoord ( x2, y2 )[m
+[32m+[m[32m  rect = _C.create_rectangle(x1, y1, x2, y2,[m
+[32m+[m[32m                      outline = _penColor,[m
+[32m+[m[32m                      width = _penSize,[m
+[32m+[m[32m                      fill = _brushColor)[m
+[32m+[m[32m  return rect[m
+[32m+[m[32m#----------------------------------[m
+ def circle(x, y, R):[m
+[31m-    x1 = x - R[m
+[31m-    y1 = y - R[m
+[31m-    x2 = x + R[m
+[31m-    y2 = y + R[m
+[31m-    x1, y1 = transformCoord(x1, y1)[m
+[31m-    x2, y2 = transformCoord(x2, y2)[m
+[31m-    circ = _C.create_oval([m
+[31m-            x1, y1, x2, y2,[m
+[31m-            outline=_penColor, width=_penSize, fill=_brushColor[m
+[31m-    )[m
+[31m-    return circ[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  x1 = x - R; y1 = y - R[m
+[32m+[m[32m  x2 = x + R; y2 = y + R[m
+[32m+[m[32m  return oval(x1, y1, x2, y2)[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef oval(x1, y1, x2, y2):[m
+[32m+[m[32m  x1, y1 = transformCoord ( x1, y1 )[m
+[32m+[m[32m  x2, y2 = transformCoord ( x2, y2 )[m
+[32m+[m[32m  _oval = _C.create_oval(x1, y1, x2, y2,[m
+[32m+[m[32m                 outline = _penColor,[m
+[32m+[m[32m                 width = _penSize,[m
+[32m+[m[32m                 fill = _brushColor)[m
+[32m+[m[32m  return _oval[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef arc(x1, y1, x2, y2, start, end, style = PIESLICE):[m
+[32m+[m[32m  x1, y1 = transformCoord ( x1, y1 )[m
+[32m+[m[32m  x2, y2 = transformCoord ( x2, y2 )[m
+[32m+[m[32m  _arc = _C.create_arc(x1, y1, x2, y2,[m
+[32m+[m[32m                 start = start, extent = end - start,[m
+[32m+[m[32m                 style = style,[m
+[32m+[m[32m                 outline = _penColor,[m
+[32m+[m[32m                 width = _penSize,[m
+[32m+[m[32m                 fill = _brushColor)[m
+[32m+[m[32m  return _arc[m
+[32m+[m[32m#----------------------------------[m
+ def polygon(points):[m
+[31m-    coord = unpackCoord(points)[m
+[31m-    if points[0] != points[-1]:[m
+[31m-        points.append(points[0])[m
+[31m-    plg = _C.create_polygon([m
+[31m-            *coord,[m
+[31m-            outline=_penColor, width=_penSize, fill=_brushColor[m
+[31m-    )[m
+[31m-    return plg[m
+[31m-[m
+[31m-[m
+[31m-def image(x, y, fileName, anchor=NW, **kwargs):[m
+[31m-    if type(x) == tuple:[m
+[31m-        fileName = y[m
+[31m-        x, y = x[m
+[31m-    x, y = transformCoord(x, y)[m
+[31m-    try:[m
+[31m-        if fileName.lower().endswith('.gif'):[m
+[31m-            newImage = tkinter.PhotoImage(file=fileName)[m
+[31m-        else:[m
+[31m-            im = Image.open(fileName)[m
+[31m-            newImage = ImageTk.PhotoImage(im)[m
+[31m-    except Exception:[m
+[31m-        pass[m
+[31m-    _images.append(newImage)[m
+[31m-    img = _C.create_image(x, y, image=newImage, anchor=anchor, **kwargs)[m
+[31m-    return img[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  coord = unpackCoord(points)[m
+[32m+[m[32m  if points[0] != points[-1]:[m
+[32m+[m[32m     points.append( points[0] )[m
+[32m+[m[32m  plg = _C.create_polygon(*coord,[m
+[32m+[m[32m        outline=_penColor, width = _penSize,[m
+[32m+[m[32m        fill=_brushColor)[m
+[32m+[m[32m  return plg[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef image(x, y, fileName, anchor = NW, **kwargs):[m
+[32m+[m[32m  if type(x) == tuple:[m
+[32m+[m[32m    fileName = y[m
+[32m+[m[32m    x, y = x[m
+[32m+[m[32m  x, y = transformCoord ( x, y )[m
+[32m+[m[32m  try:[m
+[32m+[m[32m   if fileName.lower().endswith('.gif'):[m
+[32m+[m[32m     newImage = tkinter.PhotoImage(file = fileName)[m
+[32m+[m[32m   else:[m
+[32m+[m[32m     im = Image.open(fileName)[m
+[32m+[m[32m     newImage = ImageTk.PhotoImage(im)[m
+[32m+[m[32m  except:[m
+[32m+[m[32m   pass[m
+[32m+[m[32m  _images.append(newImage)[m
+[32m+[m[32m  img = _C.create_image(x, y, image = newImage, anchor = anchor, **kwargs)[m
+[32m+[m[32m  return img[m
+[32m+[m[32m#----------------------------------[m
+ def label(_text, _x, _y, **kwargs):[m
+[31m-    kwargs["bg"] = kwargs.get("bg", "white")[m
+[31m-    lbl = tkinter.Label(_win, text=_text, **kwargs)[m
+[31m-    _x, _y = transformCoord(_x, _y)[m
+[31m-    lbl.place(x=_x, y=_y)[m
+[31m-    return lbl[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  kwargs["bg"] = kwargs.get("bg", "white")[m
+[32m+[m[32m  lbl = tkinter.Label(_win, text = _text,  **kwargs)[m
+[32m+[m[32m  _x, _y = transformCoord(_x, _y)[m
+[32m+[m[32m  lbl.place(x = _x, y = _y)[m
+[32m+[m[32m  return lbl[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef checkbox(_text, _x, _y, **kwargs):[m
+[32m+[m[32m  def _setChecked(self, value):[m
+[32m+[m[32m    self.var.set(value)[m
+[32m+[m[32m    print('set', value)[m
+[32m+[m[32m  kwargs["bg"] = kwargs.get("bg", "white")[m
+[32m+[m[32m  cbx = tkinter.Checkbutton( _win, text = _text, **kwargs )[m
+[32m+[m[32m  cbx.var = tkinter.IntVar()[m
+[32m+[m[32m  cbx["variable"] = cbx.var[m
+[32m+[m[32m  tkinter.Checkbutton.checked = property( lambda x: x.var.get(), _setChecked )[m
+[32m+[m[32m  _x, _y = transformCoord(_x, _y)[m
+[32m+[m[32m  cbx.place(x = _x, y = _y)[m
+[32m+[m[32m  return cbx[m
+[32m+[m[32m#----------------------------------[m
+ def button(_text, _x, _y, **kwargs):[m
+[31m-    btn = tkinter.Button(_win, text=_text, **kwargs)[m
+[31m-    _x, _y = transformCoord(_x, _y)[m
+[31m-    btn.place(x=_x, y=_y)[m
+[31m-    return btn[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  btn = tkinter.Button(_win, text = _text, **kwargs)[m
+[32m+[m[32m  _x, _y = transformCoord(_x, _y)[m
+[32m+[m[32m  btn.place(x = _x, y = _y)[m
+[32m+[m[32m  return btn[m
+[32m+[m[32m#----------------------------------[m
+ def coords(obj):[m
+[31m-    # return _C.coords(obj)[m
+[31m-    return _C.bbox(obj)[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  return _C.coords(obj)[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef bbox(obj):[m
+[32m+[m[32m  return _C.bbox(obj) #(+ border!)[m
+[32m+[m[32m#----------------------------------[m
+ def center(obj):[m
+[31m-    x1, y1, x2, y2 = coords(obj)[m
+[31m-    return (x1+x2)/2, (y1+y2)/2[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  x1, y1, x2, y2 = coords(obj)[m
+[32m+[m[32m  return (x1+x2)/2, (y1+y2)/2[m
+[32m+[m[32m#----------------------------------[m
+ def xCoord(obj):[m
+[31m-    x1, y1, x2, y2 = coords(obj)[m
+[31m-    return x1[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  x1, y1, x2, y2 = coords(obj)[m
+[32m+[m[32m  return x1[m
+[32m+[m[32m#----------------------------------[m
+ def yCoord(obj):[m
+[31m-    x1, y1, x2, y2 = coords(obj)[m
+[31m-    return y1[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  x1, y1, x2, y2 = coords(obj)[m
+[32m+[m[32m  return y1[m
+[32m+[m[32m#----------------------------------[m
+ def moveObjectTo(obj, x, y):[m
+[31m-    x, y = transformCoord(x, y)[m
+[31m-    coords = _C.coords(obj)[m
+[31m-    _C.move(obj, x-coords[0], y-coords[1])[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  x, y = transformCoord(x, y)[m
+[32m+[m[32m  coords = _C.coords(obj)[m
+[32m+[m[32m  _C.move(obj, x-coords[0], y-coords[1])[m
+[32m+[m[32m#----------------------------------[m
+ def moveObjectBy(obj, dx, dy):[m
+[31m-    if _viewPort:[m
+[31m-        x1, x2, y1, y2 = _viewPort[m
+[31m-        w, h = windowSize()[m
+[31m-        dx = dx*w/(x2 - x1)[m
+[31m-        dy = - dy*h/(y2 - y1)[m
+[31m-    _C.move(obj, dx, dy)[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  if _viewPort:[m
+[32m+[m[32m     x1, x2, y1, y2 = _viewPort[m
+[32m+[m[32m     w, h = windowSize()[m
+[32m+[m[32m     dx = dx*w/(x2 - x1)[m
+[32m+[m[32m     dy = - dy*h/(y2 - y1)[m
+[32m+[m[32m  _C.move(obj, dx, dy)[m
+[32m+[m[32m#----------------------------------[m
+ def deleteObject(obj):[m
+[31m-    _C.delete(obj)[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  _C.delete(obj)[m
+[32m+[m[32m#----------------------------------[m
+ def changeCoords(obj, points):[m
+[31m-    coord = unpackCoord(points)[m
+[31m-    _C.coords(obj, *coord)[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  coord = unpackCoord(points)[m
+[32m+[m[32m  _C.coords(obj, *coord)[m
+[32m+[m[32m#----------------------------------[m
+ def changeProperty(obj, **kwargs):[m
+[31m-    _C.itemconfigure(obj, **kwargs)[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  _C.itemconfigure(obj, **kwargs)[m
+[32m+[m[32m#----------------------------------[m
+ def changePenColor(obj, color):[m
+[31m-    _C.itemconfigure(obj, outline=color)[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  _C.itemconfigure(obj, outline=color)[m
+[32m+[m[32m#----------------------------------[m
+ def changeFillColor(obj, color):[m
+[31m-    _C.itemconfigure(obj, fill=color)[m
+[31m-[m
+[31m-[m
+[31m-def onMouseEvent(eventName, fn=None, btn=0):[m
+[31m-    eventStr = "<%s>" % eventName[m
+[31m-    if btn == 0:[m
+[31m-        if type(fn) == int:[m
+[31m-            btn = fn[m
+[31m-            fn = None[m
+[31m-    if btn > 0:[m
+[31m-        eventStr = "<%s-%d>" % (eventName, btn)[m
+[31m-    _C.bind(eventStr, fn)[m
+[31m-    listen()[m
+[31m-[m
+[31m-[m
+[31m-def onMouseMove(fn=None):[m
+[31m-    _C.bind("<Motion>", fn)[m
+[31m-    listen()[m
+[31m-[m
+[31m-[m
+[31m-def onMouseButtonMove(fn=None, btn=0):[m
+[31m-    _C.bind("<B1-Motion>", fn)[m
+[31m-    listen()[m
+[31m-[m
+[31m-[m
+[31m-def onMouseDown(fn=None, btn=0):[m
+[31m-    onMouseEvent("Button", fn, btn)[m
+[31m-[m
+[31m-[m
+[31m-'''[m
+[31m-def onMouseUp(fn=None, btn=0):[m
+[31m-    onMouseEvent("ButtonRelease", fn, btn)[m
+[31m-'''[m
+[31m-[m
+[31m-[m
+[31m-def onMouseClick(fn=None, btn=0):[m
+[31m-    onMouseUp(fn, btn)[m
+[31m-[m
+[31m-[m
+[31m-def onMouseDblClick(fn=None, btn=0):[m
+[31m-    onMouseEvent("Double-Button", fn, btn)[m
+[31m-[m
+[31m-[m
+[31m-def onMouseUp(fn=None, btn=0):[m
+[31m-    eventStr = "<ButtonRelease>"[m
+[31m-    if btn == 0:[m
+[31m-        if type(fn) == int:[m
+[31m-            btn = fn[m
+[31m-            fn = None[m
+[31m-    if btn > 0:[m
+[31m-        eventStr = "<ButtonRelease-%d>" % btn[m
+[31m-    _C.bind(eventStr, fn)[m
+[31m-    listen()[m
+[31m-[m
+[31m-[m
+[31m-def onKey(keyStr, fn=None):[m
+[31m-    if type(keyStr) == str:[m
+[31m-        _C.bind("<KeyPress-%s>" % keyStr, fn)[m
+[31m-    else:[m
+[31m-        _C.bind("<KeyPress>", keyStr)[m
+[31m-    listen()[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  _C.itemconfigure(obj, fill=color)[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef onMouseEvent(eventName, fn = None, btn = 0):[m
+[32m+[m[32m  eventStr = "<%s>" % eventName[m
+[32m+[m[32m  if btn == 0:[m
+[32m+[m[32m    if type(fn) == int:[m
+[32m+[m[32m      btn = fn[m
+[32m+[m[32m      fn = None[m
+[32m+[m[32m  if btn > 0:[m
+[32m+[m[32m    eventStr = "<%s-%d>" % (eventName, btn)[m
+[32m+[m[32m  _C.bind(eventStr, fn);[m
+[32m+[m[32m  listen()[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef onMouseMove(fn = None):[m
+[32m+[m[32m  _C.bind("<Motion>", fn);[m
+[32m+[m[32m  listen()[m
+[32m+[m[32mdef onMouseButtonMove(fn = None, btn = 0):[m
+[32m+[m[32m  _C.bind("<B1-Motion>", fn);[m
+[32m+[m[32m  listen()[m
+[32m+[m[32mdef onMouseDown(fn = None, btn = 0):[m
+[32m+[m[32m  onMouseEvent("Button", fn, btn)[m
+[32m+[m[32mdef onMouseUp(fn = None, btn = 0):[m
+[32m+[m[32m  onMouseEvent("ButtonRelease", fn, btn)[m
+[32m+[m[32mdef onMouseClick(fn = None, btn = 0):[m
+[32m+[m[32m  onMouseUp(fn, btn)[m
+[32m+[m[32mdef onMouseDblClick(fn = None, btn = 0):[m
+[32m+[m[32m  onMouseEvent("Double-Button", fn, btn)[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef onMouseUp(fn = None, btn = 0):[m
+[32m+[m[32m  eventStr = "<ButtonRelease>"[m
+[32m+[m[32m  if btn == 0:[m
+[32m+[m[32m    if type(fn) == int:[m
+[32m+[m[32m      btn = fn[m
+[32m+[m[32m      fn = None[m
+[32m+[m[32m  if btn > 0:[m
+[32m+[m[32m    eventStr = "<ButtonRelease-%d>" % btn[m
+[32m+[m[32m  _C.bind(eventStr, fn);[m
+[32m+[m[32m  listen()[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef onKey(keyStr, fn = None):[m
+[32m+[m[32m  if type(keyStr) == str:[m
+[32m+[m[32m    _C.bind("<KeyPress-%s>" % keyStr, fn);[m
+[32m+[m[32m  else:[m
+[32m+[m[32m    _C.bind("<KeyPress>", keyStr);[m
+[32m+[m[32m  listen()[m
+[32m+[m[32m#----------------------------------[m
+ def listen():[m
+[31m-    _C.focus_force()[m
+[31m-[m
+[31m-[m
+[31m-def onTimer(func, _time=-1):[m
+[31m-    global _timerCalls[m
+[31m-    if _time < 0:[m
+[31m-        _time = 30[m
+[31m-    timerId = onTimerCall(func, _time)[m
+[31m-    _timerCalls.append(timerId)[m
+[31m-    return timerId[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  _C.focus_force()[m
+[32m+[m[32m#----------------------------------[m
+[32m+[m[32mdef onTimer(func, _time = -1):[m
+[32m+[m[32m  global _timerCalls[m
+[32m+[m[32m  if _time < 0: _time = 30[m
+[32m+[m[32m  timerId = onTimerCall(func, _time)[m
+[32m+[m[32m  _timerCalls.append( timerId )[m
+[32m+[m[32m  return timerId[m
+[32m+[m[32m#----------------------------------[m
+ def killTimer(timerId):[m
+[31m-    global _timerCalls[m
+[31m-    if timerId in _timerCalls:[m
+[31m-        _timerCalls.remove(timerId)[m
+[31m-        timerId.active = False[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  global _timerCalls[m
+[32m+[m[32m  if timerId in _timerCalls:[m
+[32m+[m[32m    _timerCalls.remove( timerId )[m
+[32m+[m[32m    timerId.active = False[m
+[32m+[m[32m#----------------------------------[m
+ def runLoopFunc(timerCall):[m
+[31m-    def timerFunc():[m
+[31m-        if timerCall.active:[m
+[31m-            timerCall.func()[m
+[31m-            _win.after(timerCall.timeInterval, timerFunc)[m
+[31m-    return timerFunc[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  def timerFunc():[m
+[32m+[m[32m    if timerCall.active:[m
+[32m+[m[32m      timerCall.func()[m
+[32m+[m[32m      _win.after(timerCall.timeInterval, timerFunc)[m
+[32m+[m[32m  return timerFunc[m
+[32m+[m[32m#----------------------------------[m
+ def run():[m
+[31m-    for timerCall in _timerCalls:[m
+[31m-        runLoopFunc(timerCall)()[m
+[31m-    _win.mainloop()[m
+[31m-[m
+[31m-[m
+[32m+[m[32m  for timerCall in _timerCalls:[m
+[32m+[m[32m    runLoopFunc(timerCall)()[m
+[32m+[m[32m  _win.mainloop()[m
+[32m+[m[32m#----------------------------------[m
+ def close():[m
+[31m-    _win.destroy()[m
+[31m-[m
+[32m+[m[32m  _win.destroy()[m
+ [m
+[32m+[m[32m###########################################[m
+ __initGraph__()[m
+ if __name__ == "__main__":[m
+[31m-    windowSize(500, 250)[m
+[32m+[m[32m  windowSize ( 500, 250 )[m
+ [m
+[31m-    for i in range(0, 100, 10):[m
+[31m-        line(0, 0, 100, i)[m
+[32m+[m[32m  for i in range(0, 100, 10):[m
+[32m+[m[32m    line(0, 0, 100, i)[m
+ [m
+[31m-    penColor("red")[m
+[31m-    for i in range(200, 100, -10):[m
+[31m-        brushColor(randint(0, 255), randint(0, 255), randint(0, 255))[m
+[31m-        rectangle(100, 100, i, i)[m
+[32m+[m[32m  penColor("red")[m
+[32m+[m[32m  for i in range(200, 100, -10):[m
+[32m+[m[32m    brushColor( randint(0,255),randint(0,255),randint(0,255))[m
+[32m+[m[32m    rectangle(100, 100, i, i)[m
+ [m
+[31m-    penColor("blue")[m
+[31m-    for i in range(100, 0, -10):[m
+[31m-        brushColor(randint(0, 255), randint(0, 255), randint(0, 255))[m
+[31m-        circle(300, 100, i)[m
+[32m+[m[32m  penColor("blue")[m
+[32m+[m[32m  for i in range(100, 0, -10):[m
+[32m+[m[32m    brushColor( randint(0,255),randint(0,255),randint(0,255))[m
+[32m+[m[32m    circle(300, 100, i)[m
+ [m
+[31m-    penColor("red")[m
+[31m-    for i in range(10, 100, 10):[m
+[31m-        brushColor(randint(0, 255), randint(0, 255), randint(0, 255))[m
+[31m-        polygon([(70, 100), (150, i), (230, 100), (70, 100)])[m
+[32m+[m[32m  penColor("red")[m
+[32m+[m[32m  for i in range(10, 100, 10):[m
+[32m+[m[32m    brushColor( randint(0,255),randint(0,255),randint(0,255))[m
+[32m+[m[32m    polygon([(70,100), (150,i), (230,100), (70,100)])[m
+ [m
+[31m-    run()[m
+[32m+[m[32m  run()[m
